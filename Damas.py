@@ -1,6 +1,4 @@
-from Tabuleiro import Tabuleiro
+from Jogo import Jogo
 
-tabuleiro = Tabuleiro()
-tabuleiro.inicializaTabuleiro()
-
-tabuleiro.imprime()
+damas = Jogo()
+damas.jogar

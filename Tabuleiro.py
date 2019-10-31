@@ -9,7 +9,7 @@ class Tabuleiro():
 		for i in range(8):
 			aux = []
 			for j in range(8):
-				aux.append("t")
+				aux.append("")
 
 			self.tabuleiro.append(aux)
 
@@ -61,9 +61,15 @@ class Tabuleiro():
 
 		if (ini.retornaPeca(self.tabuleiro, posIni) == true and fim.retornaPeca(self.tabuleiro, posFim) == false):
 
-			if (fim.moverPeca(posIni, posFim) != false):
+			if (fim.moverPeca(self.tabuleiro,posIni, posFim)):
 
-				imprime()
+				if (self.tabuleiro = fim.moverPeca(posIni, posFim) != self.tabuleiro):
+				
+					imprime()
+
+				else:
+
+					print ("Movimento Irregular")
 
 			else:
 
@@ -72,3 +78,17 @@ class Tabuleiro():
 		else:
 
 			print ("Movimento Irregular")
+
+	def Capturar():
+		aux = Pecas()
+
+		if (aux.captura(self.tabuleiro,posIni,posFim) == true) :
+			if (self.tabuleiro = aux.captura(self.tabuleiro,posIni,posFim) != self.tabuleiro):
+				
+					imprime()
+
+				else:
+
+					print ("Movimento Irregular")
+		else:
+			print("Movimento Irregular")
