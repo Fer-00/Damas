@@ -1,3 +1,5 @@
+from pecas import pecas
+
 class Tabuleiro():
 	
 	tabuleiro = []	
@@ -47,16 +49,15 @@ class Tabuleiro():
 		for i in range(8):
 			print('')
 			print("-"*33)
-			for x in range(8):
-				print ("|",self.tabuleiro[i][x],end='')
+			#print ("%i"%i),
+			for j in range(8):
+				print ("|",self.tabuleiro[i][j],end='')
 				print (" ", end='');
 
-		#print " "
+	def mover():
+		
+		ini = pecas()
+		fim = pecas ()
 
-		#for i in range(8):
-		#	print "%i"%i,
-    	#
-		#	for j in range(len(self.tabuleiro[i])):
-		#		print " | "
-    	
-    	#	print " "
+		ini.retornaPeca(self.tabuleiro, posIni)
+		fim.retornaPeca(self.tabuleiro, posFim)
