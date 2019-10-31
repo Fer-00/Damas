@@ -1,4 +1,4 @@
-from pecas import pecas
+from Pecas import Pecas
 
 class Tabuleiro():
 	
@@ -54,10 +54,21 @@ class Tabuleiro():
 				print ("|",self.tabuleiro[i][j],end='')
 				print (" ", end='');
 
-	def mover():
+	def mover(self, posIni,posFim):
 		
-		ini = pecas()
-		fim = pecas ()
+		ini = Pecas()
+		fim = Pecas()
 
-		ini.retornaPeca(self.tabuleiro, posIni)
-		fim.retornaPeca(self.tabuleiro, posFim)
+		if (ini.retornaPeca(self.tabuleiro, posIni) == true and fim.retornaPeca(self.tabuleiro, posFim) == false):
+
+			if (fim.moverPeca(posIni, posFim) != false):
+
+				imprime()
+
+			else:
+
+				print ("Movimento Irregular")
+
+		else:
+
+			print ("Movimento Irregular")
