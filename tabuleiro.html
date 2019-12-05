@@ -1,0 +1,173 @@
+<html>
+<head>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		function gerar_tabuleiro(){
+			var escala = 8;
+			var aux = '';
+
+			tab = document.getElementById("tabuleiro");
+
+			for(var i = 0; i < escala; i++)
+			{
+				aux += '<tr id="'+i+'">';
+				for(var j = 0; j < escala; j++)
+					if(i%2)
+					{
+						if(j % 2)
+							aux+= '<td id="'+j+'" style="background-color:white" >';
+						else
+						{
+							aux+= '<td id="'+j+'" style="background-color:black;" onclick = "teste(this)">';
+						}
+					}
+					else
+					{
+						if(j % 2)
+						{
+							aux+= '<td id="'+j+'" style="background-color:black" onclick = "teste(this)" >';
+						}
+						else
+							aux+= '<td id="'+j+'" style="background-color:white">';
+
+					}
+				aux += '</tr>';
+			}
+
+			tab.innerHTML = aux;
+
+		}
+			function new_game()
+			{
+				tabuleiro = [];
+				origem = [];
+				destino = [];
+
+				origem[0] = -1;
+				origem[1] = -1;
+				var linhas = document.getElementsByTagName("tr");
+
+				for(i = 0; i < linhas.length; i++)
+				{
+					tabuleiro[i] = [];
+					if(i < 3)
+					{
+						if(!(i%2))
+						{
+							for(j = 1; j < linhas[i].children.length; j+=2)
+							{
+								linhas[i].children[j].style.backgroundImage="url('white.png')"
+								linhas[i].children[j].style.backgroundRepeat="no-repeat"
+								linhas[i].children[j].style.backgroundPosition="center center"
+
+								tabuleiro[i][j] = 0;
+							}
+						}
+						else
+						{
+							for(j = 0; j < linhas[i].children.length; j+=2)
+							{
+								linhas[i].children[j].style.backgroundImage="url('white.png')"
+								linhas[i].children[j].style.backgroundRepeat="no-repeat"
+								linhas[i].children[j].style.backgroundPosition="center center"
+
+								tabuleiro[i][j] = 1;
+							}
+
+						}
+					}
+
+					if(linhas[i].id > 4)
+					{
+							if( i%2 )
+							{
+								for(j=0; j< linhas[i].children.length; j+=2)
+								{
+									linhas[i].children[j].style.backgroundImage="url('black.png')"
+									linhas[i].children[j].style.backgroundRepeat="no-repeat"
+									linhas[i].children[j].style.backgroundPosition="center center"
+								}
+
+							}
+
+							else
+							{
+								for(j=1; j<linhas[i].children.length; j+=2)
+								{
+									linhas[i].children[j].style.backgroundImage="url('black.png')"
+									linhas[i].children[j].style.backgroundRepeat="no-repeat"
+									linhas[i].children[j].style.backgroundPosition="center center"
+								}
+
+							}	
+						
+					}
+
+				}
+			}
+			function teste(e) {
+				alert(e.parentNode.id+ " - " + e.id);
+				if(origem[0] == e.parentNode.id && e.id == origem[1] )
+				{
+					origem[0] = -1;
+					origem[1] = -1;
+					return;
+				}
+				else if(origem == -1)
+				{
+					origem[0] = e.parentNode.id;
+					origem[1] = e.id;
+				}
+
+				else{
+					destino[0] = e.parentNode.id;
+					destino[1] = e.id;
+					jogada = [];
+					jogada['origem'] = origem;
+					jogada['destino']		 = destino;
+					$.post("localhost/jogada", JSON.stringify(jogada),function(data, status)
+					{
+						alert(data);
+					});
+
+				}
+			}
+
+		function executa_jogada(destino)
+		{
+
+		}
+
+		window.onload = function() 
+		{ 
+			gerar_tabuleiro();
+			new_game();
+		}
+
+	</script>
+
+	<style type="text/css">
+		
+		table{
+			margin: auto;
+			border: 1px solid black;
+		}
+
+		td{
+			margin: 0px;
+			padding: 0px;
+			width: 70px;
+			height: 70px;
+		}
+	</style>
+</head>
+<body>
+	<table id="tabuleiro">
+		
+	</table>
+</body>

@@ -44,51 +44,47 @@ class Tabuleiro():
 	def imprime(self):
 		
 		for x in range(8):
-			print ("%3i"%x, end=' ')
+			print "%3i"%x,
+
+		print ""
 
 		for i in range(8):
-			print('')
-			print("-"*33)
-			#print ("%i"%i),
+			print "%i"%i
 			for j in range(8):
-				print ("|",self.tabuleiro[i][j],end='')
-				print (" ", end='');
+				print "|",
+				print self.tabuleiro[i][j],
+			print "|"
+
 
 	def mover(self, posIni,posFim):
 		
 		ini = Pecas()
 		fim = Pecas()
 
-		if (ini.retornaPeca(self.tabuleiro, posIni) == true and fim.retornaPeca(self.tabuleiro, posFim) == false):
+		if (ini.retornaPeca(self.tabuleiro, posIni) == True and fim.retornaPeca(self.tabuleiro, posFim) == False):
 
+			self.tabuleiro = fim.moverPeca(self.tabuleiro,posIni, posFim)
 			if (fim.moverPeca(self.tabuleiro,posIni, posFim)):
-
-				if (self.tabuleiro = fim.moverPeca(posIni, posFim) != self.tabuleiro):
-				
-					imprime()
-
-				else:
-
-					print ("Movimento Irregular")
-
+				return fim.moverPeca(self.tabuleiro,posIni, posFim)
 			else:
-
-				print ("Movimento Irregular")
+				return self.tabuleiro
+				print ("Movimento Irregular2")
 
 		else:
 
-			print ("Movimento Irregular")
+			print ("Movimento Irregular3")
 
 	def Capturar():
 		aux = Pecas()
 
-		if (aux.captura(self.tabuleiro,posIni,posFim) == true) :
-			if (self.tabuleiro = aux.captura(self.tabuleiro,posIni,posFim) != self.tabuleiro):
-				
-					imprime()
-
-				else:
-
-					print ("Movimento Irregular")
+		if (aux.captura(self.tabuleiro,posIni,posFim) == True) :
+			tabuleiro = aux.captura(self.tabuleiro,posIni,posFim)
+			if (tabuleiro):
+				imprime()
+			else:
+				print ("Movimento Irregular")
 		else:
 			print("Movimento Irregular")
+
+	def retornaTabuleiro():
+		return self.tabuleiro

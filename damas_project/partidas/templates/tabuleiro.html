@@ -1,0 +1,241 @@
+<html>
+<head>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		function gerar_tabuleiro(){
+			var escala = 8;
+			var aux = '';
+
+			tab = document.getElementById("tabuleiro");
+
+			for(var i = 0; i < escala; i++)
+			{
+				aux += '<tr id="'+i+'">';
+				for(var j = 0; j < escala; j++)
+					if(i%2)
+					{
+						if(j % 2)
+							aux+= '<td id="'+j+'" style="background-color:white" >';
+						else
+						{
+							aux+= '<td id="'+j+'" style="background-color:black;" onclick = "teste(this)">';
+						}
+					}
+					else
+					{
+						if(j % 2)
+						{
+							aux+= '<td id="'+j+'" style="background-color:black" onclick = "teste(this)" >';
+						}
+						else
+							aux+= '<td id="'+j+'" style="background-color:white">';
+
+					}
+				aux += '</tr>';
+			}
+
+			tab.innerHTML = aux;
+
+		}
+			function new_game()
+			{
+				tabuleiro = [];
+				origem = [];
+				destino = [];
+
+				origem[0] = -1;
+				origem[1] = -1;
+				var linhas = document.getElementsByTagName("tr");
+
+				for(i = 0; i < linhas.length; i++)
+				{
+					tabuleiro[i] = [];
+					if(i < 3)
+					{
+						if(!(i%2))
+						{
+							for(j = 1; j < linhas[i].children.length; j+=2)
+							{
+								linhas[i].children[j].style.backgroundImage="url('https://raw.githubusercontent.com/brunoventura/damas/master/img/white.png')"
+								linhas[i].children[j].style.backgroundRepeat="no-repeat"
+								linhas[i].children[j].style.backgroundPosition="center center"
+
+								tabuleiro[i][j] = 0;
+							}
+						}
+						else
+						{
+							for(j = 0; j < linhas[i].children.length; j+=2)
+							{
+								linhas[i].children[j].style.backgroundImage="url('https://raw.githubusercontent.com/brunoventura/damas/master/img/white.png')"
+								linhas[i].children[j].style.backgroundRepeat="no-repeat"
+								linhas[i].children[j].style.backgroundPosition="center center"
+
+								tabuleiro[i][j] = 1;
+							}
+
+						}
+					}
+
+					if(linhas[i].id > 4)
+					{
+							if( i%2 )
+							{
+								for(j=0; j< linhas[i].children.length; j+=2)
+								{
+									linhas[i].children[j].style.backgroundImage="url('https://raw.githubusercontent.com/brunoventura/damas/master/img/black.png')"
+									linhas[i].children[j].style.backgroundRepeat="no-repeat"
+									linhas[i].children[j].style.backgroundPosition="center center"
+								}
+
+							}
+
+							else
+							{
+								for(j=1; j<linhas[i].children.length; j+=2)
+								{
+									linhas[i].children[j].style.backgroundImage="url('https://raw.githubusercontent.com/brunoventura/damas/master/img/black.png')"
+									linhas[i].children[j].style.backgroundRepeat="no-repeat"
+									linhas[i].children[j].style.backgroundPosition="center center"
+								}
+
+							}	
+						
+					}
+
+				}
+			}
+			function teste(e) {
+				if(origem[0] == e.parentNode.id && e.id == origem[1] )
+				{
+					origem[0] = -1;
+					origem[1] = -1;
+					return;
+				}
+				else if(origem[0] == -1 && origem[1] == -1)
+				{
+					origem[0] = e.parentNode.id;
+					origem[1] = e.id;
+					return;
+				}
+
+				else{
+					destino[0] = e.parentNode.id;
+					destino[1] = e.id;
+					jogada = [];
+					jogada[0] = origem;
+					jogada[1] = destino;
+					$.post("partida/jogada", JSON.stringify(jogada),function(data, status)
+					{
+						alert(data);
+					});
+
+					executa_jogada();
+
+					origem[0] = -1;
+					origem[1] = -1;
+					destino[0] = -1;
+					destino[1] = -1;
+
+					return;
+			}
+
+			}
+
+		function executa_jogada()
+		{
+			var linhas = document.getElementsByTagName("tr");
+			if (parseInt(origem[0])+1 == destino[0] || parseInt(origem[0])-1 == destino[0]) {
+				linhas[destino[0]].children[destino[1]].style.backgroundImage = linhas[origem[0]].children[origem[1]].style.backgroundImage;
+				linhas[destino[0]].children[destino[1]].style.backgroundRepeat="no-repeat"
+				linhas[destino[0]].children[destino[1]].style.backgroundPosition="center center"
+				linhas[origem[0]].children[origem[1]].style.backgroundImage = "";
+				if (destino[0]>origem[0]) {
+					isDamaBranca();
+				}else{
+					isDamaNegra();
+				}
+			}else if (parseInt(origem[0])+2 == destino[0] || parseInt(origem[0])-2 == destino[0]) {
+				if (destino[0]>origem[0]) {
+					linhas[destino[0]].children[destino[1]].style.backgroundImage = linhas[origem[0]].children[origem[1]].style.backgroundImage;
+					linhas[destino[0]].children[destino[1]].style.backgroundRepeat="no-repeat"
+					linhas[destino[0]].children[destino[1]].style.backgroundPosition="center center"
+					if (parseInt(destino[1]) - parseInt(origem[1]) <= 0) {
+						linhas[origem[0]].children[origem[1]].style.backgroundImage = "";
+						linhas[parseInt(destino[0])-1].children[parseInt(destino[1])+1].style.backgroundImage = "";
+						isDamaBranca();
+					}else{
+						linhas[origem[0]].children[origem[1]].style.backgroundImage = "";
+						linhas[parseInt(destino[0])-1].children[parseInt(destino[1])-1].style.backgroundImage = "";
+						isDamaBranca();
+					}
+				}else{
+					linhas[destino[0]].children[destino[1]].style.backgroundImage = linhas[origem[0]].children[origem[1]].style.backgroundImage;
+					linhas[destino[0]].children[destino[1]].style.backgroundRepeat="no-repeat"
+					linhas[destino[0]].children[destino[1]].style.backgroundPosition="center center"
+					if (parseInt(destino[1]) - parseInt(origem[1]) <= 0) {
+						linhas[origem[0]].children[origem[1]].style.backgroundImage = "";
+						linhas[parseInt(destino[0])+1].children[parseInt(destino[1])+1].style.backgroundImage = "";
+						isDamaNegra();
+					}else{
+						linhas[origem[0]].children[origem[1]].style.backgroundImage = "";
+						linhas[parseInt(destino[0])+1].children[parseInt(destino[1])-1].style.backgroundImage = "";
+						isDamaNegra();
+					}
+				}
+			}else{
+				alert("NOP");
+			}
+		}
+
+		function isDamaNegra(){
+			var linhas = document.getElementsByTagName("tr");
+			if (destino[0] == 0) {
+				linhas[destino[0]].children[destino[1]].style.backgroundImage="url('https://raw.githubusercontent.com/brunoventura/damas/master/img/blackdama.png')";
+				linhas[destino[0]].children[destino[1]].style.backgroundRepeat="no-repeat"
+				linhas[destino[0]].children[destino[1]].style.backgroundPosition="center center"
+			}
+		}
+
+		function isDamaBranca() {
+			var linhas = document.getElementsByTagName("tr");
+			if (destino[0] == 7) {
+				linhas[destino[0]].children[destino[1]].style.backgroundImage ="url('https://raw.githubusercontent.com/brunoventura/damas/master/img/whitedama.png')";
+				linhas[destino[0]].children[destino[1]].style.backgroundRepeat="no-repeat"
+				linhas[destino[0]].children[destino[1]].style.backgroundPosition="center center"
+			}
+		}
+
+		window.onload = function() 
+		{ 
+			gerar_tabuleiro();
+			new_game();
+		}
+
+	</script>
+
+	<style type="text/css">
+		
+		table{
+			margin: auto;
+			border: 1px solid black;
+		}
+
+		td{
+			margin: 0px;
+			padding: 0px;
+			width: 70px;
+			height: 70px;
+		}
+	</style>
+</head>
+<body>
+	<table id="tabuleiro">
+		
+	</table>
+</body>

@@ -1,56 +1,80 @@
 class Pecas:
 
-	self.cap = []
-	self.isDama = false
-	self.pTras = false
-	self.qPB = 12 #quantidade de peças brancas
-	self.qPP = 12 #quantidade de peças negras
-
 	def __init__(self):
-
+		
+		self.isDama = False
+		self.pTras = False
+		self.qPB = 12 
+		self.qPP = 12 
 
 	def retornaPeca(self,tabuleiro,pos):
 		
 		pos = str(pos)
-		i = pos[0]
-		j = pos[1]
+		i = int(pos[0])
+		j = int(pos[1])
 
-		if (tabuleiro[i][j] != ""):
+		if (tabuleiro[i][j] == "B" or tabuleiro[i][j] == "P"):
 			
-			return true
+			return True
 
 		else:
 
-			return false
+			return False
 		
 	def moverPeca(self,tabuleiro,posIni, posFim):
 
 		posIni = str(posIni)
-		i = posIni[0]
-		j = posIni[1]
+		i = int(posIni[0])
+		j = int(posIni[1])
 
 		posFim = str(posFim)
-		k = posFim[0]
-		l = posFim[1]
+		k = int(posFim[0])
+		l = int(posFim[1])
+		
+		if (tabuleiro[i][j] == "B"):
+			
+			if ((k + 1 == i) and ((l - 1 == j) or (l + 1 == j))):
 
+				tabuleiro[k][l] = tabuleiro[i][j]
+				tabuleiro[i][j] = " "
+				return tabuleiro
 
-		if ((k - 1 == i) and ((l - 1 == j) or (l + 1 == j))):
+			else:
 
-			tabuleiro[k][j] = tabuleiro[i][j]
-			tabuleiro[i][j] = " "
-			return tabuleiro
+				tabuleiro = tabuleiro
+				return tabuleiro
 
-		else:
+		if (tabuleiro[i][j] == "P"):
+			
+			if ((k - 1 == i) and ((l - 1 == j) or (l + 1 == j))):
 
-			tabuleiro = tabuleiro
-			return tabuleiro
+				tabuleiro[k][l] = tabuleiro[i][j]
+				tabuleiro[i][j] = " "
+				return tabuleiro
+
+			else:
+
+				return tabuleiro
 	
-	def verificaDama():
-		pass
+	def verificaDama(self,tabuleiro,pos):
+		if(tabuleiro[pos[0]][pos[1]] == "B") :
+			if (pos[0] == 7):
+				self.isDama = True
+				self.pTras = True
+			else:
+				self.isDama = False
+				self.pTras = False
+		if (tabuleiro[pos[0]][pos[1]] == "P") :
+			if (pos[0] == 0):
+				self.isDama = True
+				self.pTras = True
+			else:
+				self.isDama = False
+				self.pTras = False
 
 	def captura(self, tabuleiro, posIni, posFim):
 		possivelCapturar()
-		if (retornaPeca(tabuleiro, posIni) == true and retornaPeca(tabuleiro, posFim) == false):
+		if (retornaPeca(tabuleiro, posIni) == True and retornaPeca(tabuleiro, posFim) == False):
 			for x in range(0,len(self.cap),2):
 				if ((posIni == self.cap[x]) and (posFim == self.cap[x+1])):
 					posIni = str(posIni)
@@ -74,7 +98,7 @@ class Pecas:
 			
 			for j in range(8):
 		
-				if (j >= 1 and j <= 7):
+				if (j >= 1 and j <= 6):
 					if ((tabuleiro[i][j] == "B" and tabuleiro[i+1][j+1] == "P" and tabuleiro[i+2][j+2] == "") or (tabuleiro[i][j] == "B" and tabuleiro[i+1][j-1] == "P" and tabuleiro[i+2][j-2] == "") or (tabuleiro[i][j] == "P" and tabuleiro[i+1][j+1] == "B" and tabuleiro[i+2][j+2] == "") or (tabuleiro[i][j] == "P" and tabuleiro[i+1][j-1]) == "B" and tabuleiro[i+2][j-2] == ""):
 						self.cap.append(i,j) 
 					else:
@@ -89,45 +113,45 @@ class Pecas:
 				elif (i == 7):
 					if ((tabuleiro[i][j] == "B" and tabuleiro[i+1][j-1] == "P" and tabuleiro[i+2][j-2] == "") or (tabuleiro[i][j] == "P" and tabuleiro[i+1][j-1] == "B" and tabuleiro[i+2][j-2] == "")):
 						self.cap.append(i,j) 
-					else
+					else:
 						continue
 
 				else:
-					return false
+					return False
 
 			if (len(self.cap) > 0):
-				return true
+				return True
 
 			else:
-				return false
+				return False
 
 	def verificaGanhador(self):
 		
 		if (self.qPB == 0 or self.qPP == 0):
 			
-			ganhador = true
-
 			if (self.qPB == 0):
-				print ("Pababéns negras ganharam")
+				print ("Pababens negras ganharam")
 
 			else:
-				print ("Pababéns brancas ganharam")
+				print ("Pababens brancas ganharam")
 
 			resetaTabuleiro()
 
+			return True
+
 		else:
 
-			ganhador = false
+			return False
 
 	def removePeca(tabuleiro, i, j):
 		aux = tabuleiro[i][j]
 		tabuleiro[i][j] = ""
 
 		if (aux == "B") :
-			qPB --
+			qPB = qPB - 1
 			verificaGanhador()
 		elif (aux == "P"):
-			qPP --
+			qPP = qPP - 1
 			verificaGanhador()
 		else:
 			print("Erro")	
